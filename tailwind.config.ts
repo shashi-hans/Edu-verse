@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,15 +53,30 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+				// Learning platform theme colors
+				kids: {
+					primary: '#FF6B6B',
+					secondary: '#4ECDC4',
+					accent: '#FFE66D',
+					light: '#FFF0F0'
+				},
+				adult: {
+					primary: '#6366F1',
+					secondary: '#8B5CF6',
+					accent: '#06B6D4',
+					light: '#F8FAFC'
+				},
+				adventure: {
+					primary: '#F59E0B',
+					secondary: '#EF4444',
+					accent: '#10B981',
+					light: '#FEF3C7'
+				},
+				academic: {
+					primary: '#1E40AF',
+					secondary: '#059669',
+					accent: '#7C3AED',
+					light: '#EBF8FF'
 				}
 			},
 			borderRadius: {
@@ -84,11 +100,21 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'slide-up': {
+					'0%': { transform: 'translateY(100%)' },
+					'100%': { transform: 'translateY(0)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'slide-up': 'slide-up 0.3s ease-out'
 			}
 		}
 	},
