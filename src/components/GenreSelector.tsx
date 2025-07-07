@@ -50,7 +50,7 @@ const GenreSelector = ({ currentTheme, onThemeChange }: GenreSelectorProps) => {
             }`}
           >
             <span className="text-2xl">{theme.icon}</span>
-            <div className="text-center">
+            <div className="text-center word-normal">
               <div className="font-semibold">{theme.name}</div>
               <div className="text-xs opacity-80">{theme.description}</div>
             </div>
