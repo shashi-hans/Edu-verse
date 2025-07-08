@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowLeft,
   ExternalLink,
   Star,
   Globe,
@@ -17,7 +16,6 @@ import {
   Video,
   Gamepad2,
   BookOpen,
-  Search,
   Home,
 } from "lucide-react";
 import { Resource, Theme } from "@/pages/Index";
@@ -62,27 +60,46 @@ const ResourceLibrary = ({ resources, theme, onClose }: LibraryProps) => {
     }
   };
 
+  // Store last 3 visited resources (as objects) in localStorage, including accessed date
+  const storeVisitedLink = (url: string) => {
+    const key = "lastVisitedResources";
+    let resourcesArr: Array<Resource & { accessedAt: string }> = [];
+    try {
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        resourcesArr = JSON.parse(stored);
+      }
+    } catch {
+      // Ignore JSON parse errors
+    }
+    // Find the resource by url
+    const resource = resources.find((r) => r.url === url);
+    if (!resource) return;
+    // Remove if already present
+    resourcesArr = resourcesArr.filter((r) => r.url !== url);
+    // Add to front as object with accessedAt
+    const now = new Date();
+    const accessedAt = `${now.getDate().toString().padStart(2, "0")}-${(now.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${now.getFullYear()}`;
+    resourcesArr.unshift({ ...resource, accessedAt });
+    // Keep only last 3
+    resourcesArr = resourcesArr.slice(0, 3);
+    localStorage.setItem(key, JSON.stringify(resourcesArr));
+  };
+
   const allResources = [...resources];
 
   const filteredResources = allResources.filter(
     (resource) => resource.genre === selectedGenre
   );
 
-  const genres = [
-    { id: "all" as const, name: "All Resources", icon: "🌐" },
-    { id: "books" as const, name: "Free Books", icon: "📚" },
-    { id: "kids" as const, name: "Kids", icon: "🎨" },
-    { id: "free" as const, name: "free", icon: "💼" },
-    { id: "adventure" as const, name: "Adventure", icon: "🌟" },
-    { id: "academic" as const, name: "Academic", icon: "🎓" },
-  ];
-
-  return (
+return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Iframe Modal */}
         {iframeUrl && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-            <div className="relative w-full h-[100vh] max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+            <div className="relative w-full h-[100vh] max-w-full bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
           <div className="flex justify-end p-2 bg-white z-10">
             <button
               className="bg-gray-200 rounded-full p-2 hover:bg-gray-300 shadow"
@@ -107,7 +124,7 @@ const ResourceLibrary = ({ resources, theme, onClose }: LibraryProps) => {
         <div
           className={`bg-gradient-to-r ${getThemeColors(
             theme
-          )} text-white p-4 shadow-lg mb-8 sticky top-0 z-50 `}
+          )} text-white p-4 shadow-lg mb-8 top-0 z-50 `}
         >
           <div className="flex items-space justify-between space-x-4">
             <Button
@@ -166,7 +183,10 @@ const ResourceLibrary = ({ resources, theme, onClose }: LibraryProps) => {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <Button
-                    onClick={() => window.open(resource.url, "_blank")}
+                    onClick={() => {
+                      storeVisitedLink(resource.url);
+                      window.open(resource.url, "_blank");
+                    }}
                     size="sm"
                     className="flex items-center gap-2"
                   >
@@ -174,7 +194,10 @@ const ResourceLibrary = ({ resources, theme, onClose }: LibraryProps) => {
                     Visit Site
                   </Button>
                   <Button
-                    onClick={() => setIframeUrl(resource.url)}
+                    onClick={() => {
+                      storeVisitedLink(resource.url);
+                      setIframeUrl(resource.url);
+                    }}
                     size="sm"
                     variant="outline"
                     className="flex items-center gap-2"

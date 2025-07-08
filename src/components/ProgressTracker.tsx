@@ -12,39 +12,20 @@ const ProgressTracker = () => {
     return colors[theme];
   };
 
-  // Sample Sites data
-  const sites = [
-    {
-      id: "1",
-      title: "PBS Kids",
-      description: "Educational games and videos featuring popular characters.",
-      url: "https://pbskids.org/",
-      type: "interactive",
-      genre: "kids",
-      rating: 4.8,
-      lastAccessed: "2025-06-15",
-    },
-    {
-      id: "2",
-      title: "Duolingo",
-      description: "Learn languages for free with game-like lessons",
-      url: "https://www.duolingo.com",
-      type: "interactive",
-      genre: "academic",
-      rating: 4.5,
-      lastAccessed: "2025-06-14",
-    },
-    {
-      id: "3",
-      title: "Wikibooks",
-      description: "Collaborative textbooks and educational resources",
-      url: "https://en.wikibooks.org",
-      type: "free books",
-      genre: "library",
-      rating: 4.5,
-      lastAccessed: "2025-04-16",
-    },
-  ];
+  // Get last visited resources from localStorage
+      const getLastVisitedResources = () => {
+      try {
+      const stored = localStorage.getItem("lastVisitedResources");
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      } catch {
+      // Ignore JSON parse errors
+      }
+      return [];
+    };
+
+  const sites = getLastVisitedResources();
 
   return (
     <div className="mb-8">
@@ -58,15 +39,8 @@ const ProgressTracker = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {sites
-              .filter((site) => site.lastAccessed)
-              .sort(
-                (a, b) =>
-                  new Date(b.lastAccessed!).getTime() -
-                  new Date(a.lastAccessed!).getTime()
-              )
-              .slice(0, 3)
-              .map((site) => (
+            {sites &&
+              sites.map((site) => (
                 <div
                   key={site.id}
                   className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -85,11 +59,11 @@ const ProgressTracker = () => {
                       </div>
                       <div className="text-sm text-gray-600">
                         Last accessed:{" "}
-                        {new Date(site.lastAccessed!).toLocaleDateString()}
+                        {site.accessedAt}
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
+                  {/* <div className="text-right">
                     <div className="text-sm font-medium text-gray-900">
                       <a
                         href={site.url}
@@ -101,7 +75,7 @@ const ProgressTracker = () => {
                         visit site
                       </a>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               ))}
           </div>

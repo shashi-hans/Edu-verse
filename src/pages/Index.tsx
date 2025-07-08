@@ -1,18 +1,8 @@
 import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { BookOpen, Clock, User, Search, Calendar } from "lucide-react";
+import { Search } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import GenreSelector from "@/components/GenreSelector";
-import MaterialViewer from "@/components/MaterialViewer";
 import ResourceLibrary from "@/components/ResourceLibrary";
 import ProgressTracker from "@/components/ProgressTracker";
 import BookResources from "@/components/BookResources";
@@ -46,30 +36,14 @@ export interface Resource {
 
 const Index = () => {
   const [currentTheme, setCurrentTheme] = useState<Theme>("kids");
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [showViewer, setShowViewer] = useState(false);
   const [showResources, setShowResources] = useState(false);
-  const [userProgress, setUserProgress] = useState<Record<string, number>>({});
 
-  // Load user progress from localStorage
   useEffect(() => {
-    const savedProgress = localStorage.getItem("learningProgress");
-    if (savedProgress) {
-      setUserProgress(JSON.parse(savedProgress));
-    }
-
     const savedTheme = localStorage.getItem("preferredTheme") as Theme;
     if (savedTheme) {
       setCurrentTheme(savedTheme);
     }
   }, []);
-
-  // Save progress to localStorage
-  const updateProgress = (courseId: string, progress: number) => {
-    const newProgress = { ...userProgress, [courseId]: progress };
-    setUserProgress(newProgress);
-    localStorage.setItem("learningProgress", JSON.stringify(newProgress));
-  };
 
   const getThemeColors = (theme: Theme) => {
     const colors = {
@@ -79,22 +53,6 @@ const Index = () => {
     };
     return colors[theme];
   };
-
-  if (showViewer && selectedCourse) {
-    return (
-      <MaterialViewer
-        course={selectedCourse}
-        onClose={() => {
-          setShowViewer(false);
-          setSelectedCourse(null);
-        }}
-        onProgressUpdate={(progress) =>
-          updateProgress(selectedCourse.id, progress)
-        }
-        theme={currentTheme}
-      />
-    );
-  }
 
   if (showResources) {
     return (
