@@ -112,4 +112,7 @@
   .word-normal {
     white-space: normal;
   }
+  .container.mx-auto .sticky {
+    position: static;
+  }
 }

@@ -80,23 +80,27 @@ const ResourceLibrary = ({ resources, theme, onClose }: LibraryProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Iframe Modal */}
-      {iframeUrl && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-          <div className="relative w-full m-t-auto h-[91vh] bg-white rounded-lg shadow-lg overflow-hidden">
+        {iframeUrl && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+            <div className="relative w-full h-[100vh] max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+          <div className="flex justify-end p-2 bg-white z-10">
             <button
-              className="absolute top-2 right-2 bg-gray-200 rounded-full p-2 hover:bg-gray-300"
+              className="bg-gray-200 rounded-full p-2 hover:bg-gray-300 shadow"
               onClick={() => setIframeUrl(null)}
             >
               Close
             </button>
+          </div>
+          <div className="flex-1">
             <iframe
               src={iframeUrl}
               title="External Resource"
               className="w-full h-full border-0"
             />
           </div>
-        </div>
-      )}
+            </div>
+          </div>
+        )}
 
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
