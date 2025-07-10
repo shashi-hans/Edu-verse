@@ -27,7 +27,7 @@ const Navigation = ({ currentTheme, onShowResources }: NavigationProps) => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <BookOpen className="w-8 h-8" />
+            <img src='../public/open-book.jfif' className="w-12 h-8" />
             <span className="text-xl font-bold">EduVerse</span>
           </div>
 
