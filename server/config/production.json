@@ -1,4 +1,4 @@
 {
     "mongoURI": "mongodb+srv://dbEduVerse:Eduverse_2023@cluster0.gfsnzka.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    "baseUrl": ""
+    "baseUrl": "https://edu-verse-4nzz.onrender.com"
   }
