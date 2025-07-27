@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const regionSchema = new mongoose.Schema({
-  region: String,
+const citySchema = new mongoose.Schema({
+  city: String,
   count: { type: Number, default: 1 },
 });
 
 const visitorSchema = new mongoose.Schema({
   total: { type: Number, default: 0 },
-  regions: [regionSchema],
+  cities: [citySchema],
 });
 
 module.exports = mongoose.model("Visitor", visitorSchema);
