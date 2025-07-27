@@ -9,6 +9,7 @@ router.post("/visit", async (req, res) => {
     const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     const geo = geoip.lookup(ip);
     const city = geo?.city || "Unknown";
+    console.log('geo>>>',geo)
 
     let visitor = await Visitor.findOne();
     console.log('visitor>>>',visitor)
@@ -20,7 +21,6 @@ router.post("/visit", async (req, res) => {
       });
     } else {
       visitor.total += 1;
-
       const cityData = visitor.cities.find((r) => r.city === city);
       if (cityData) {
         cityData.count += 1;
@@ -33,7 +33,7 @@ router.post("/visit", async (req, res) => {
     res.status(200).json({ total: visitor.total, city });
   } catch (err) {
     console.error("Visitor error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error1",err });
   }
 });
 
@@ -44,7 +44,7 @@ router.get("/count", async (req, res) => {
     console.log('stats>>>>>',stats)
     res.status(200).json(stats);
   } catch (err) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error2" });
   }
 });
 
