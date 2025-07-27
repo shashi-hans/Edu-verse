@@ -1,8 +1,9 @@
-
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { BookOpen, User, Search, Menu, X } from 'lucide-react';
-import { Theme } from '@/pages/Index';
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { BookOpen, User, Search, Menu, X } from "lucide-react";
+import { Theme } from "@/pages/Index";
+import axios from "axios";
+import {visitURL, countURL} from "@/components/../util.js"
 
 interface NavigationProps {
   currentTheme: Theme;
@@ -11,18 +12,46 @@ interface NavigationProps {
 
 const Navigation = ({ currentTheme, onShowResources }: NavigationProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [visitorCount, setVisitorCount] = useState(1);
+
+  useEffect(() => {
+    // Increment visit count
+    axios
+      .post(visitURL)
+      .then((res) => {
+        console.log("visit response")
+        setVisitorCount(res.data.total);
+      })
+      .catch(() => {
+        // fallback to just get count
+        axios
+          .get(countURL)
+          .then((res) => {
+            console.log("visit count")
+            setVisitorCount(res.data.total)
+          })
+          .catch(()=>{
+            console.log("error count")
+          })
+
+      });
+  }, []);
 
   const getThemeColor = (theme: Theme) => {
     const colors = {
-      kids: 'bg-pink-500',
-      library: 'bg-blue-600',
-      academic: 'bg-orange-500',
+      kids: "bg-pink-500",
+      library: "bg-blue-600",
+      academic: "bg-orange-500",
     };
     return colors[theme];
   };
 
   return (
-    <nav className={`${getThemeColor(currentTheme)} text-white shadow-lg sticky top-0 z-50`}>
+    <nav
+      className={`${getThemeColor(
+        currentTheme
+      )} text-white shadow-lg sticky top-0 z-50`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -33,10 +62,23 @@ const Navigation = ({ currentTheme, onShowResources }: NavigationProps) => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6">
-            <Button variant="ghost" className="text-white hover:bg-white/20">
+            {/* Profile Option
+              <Button variant="ghost" className="text-white hover:bg-white/20">
               <User className="w-4 h-4 mr-2" />
               Profile
-            </Button>
+            </Button> */}
+            <div>
+              <p className="visitor">
+                Total Visitors :{" "}
+                {visitorCount === 0 ? (
+                  <span className="overlay2">
+                    <span className="spinner2"></span>
+                  </span>
+                ) : (
+                  visitorCount
+                )}
+              </p>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -45,7 +87,11 @@ const Navigation = ({ currentTheme, onShowResources }: NavigationProps) => {
             className="md:hidden text-white hover:bg-white/20"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </Button>
         </div>
 
@@ -53,8 +99,8 @@ const Navigation = ({ currentTheme, onShowResources }: NavigationProps) => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-white/20">
             <div className="flex flex-col space-y-2">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="text-white hover:bg-white/20 justify-start"
                 onClick={() => {
                   onShowResources();
@@ -64,8 +110,8 @@ const Navigation = ({ currentTheme, onShowResources }: NavigationProps) => {
                 <Search className="w-4 h-4 mr-2" />
                 Resources
               </Button>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="text-white hover:bg-white/20 justify-start"
                 onClick={() => setIsMenuOpen(false)}
               >
